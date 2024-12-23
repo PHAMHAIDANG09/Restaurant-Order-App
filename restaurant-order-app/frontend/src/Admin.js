@@ -10,7 +10,7 @@ function Admin() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/orders');
+        const { data } = await axios.get('https://restaurant-order-app8.onrender.com/api/orders');
         setOrders(data);
 
         // Khởi tạo trạng thái checkbox mặc định là false

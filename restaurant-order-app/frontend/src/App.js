@@ -11,7 +11,7 @@ function App() {
   // Lấy danh sách món ăn từ API
   useEffect(() => {
     const fetchFoods = async () => {
-      const { data } = await axios.get('http://localhost:5000/api/foods');
+      const { data } = await axios.get('https://restaurant-order-app8.onrender.com/api/foods');
       setFoods(data);
     };
     fetchFoods();
@@ -41,7 +41,7 @@ function App() {
       alert('Vui lòng nhập số bàn!');
       return;
     }
-    await axios.post('http://localhost:5000/api/orders', {
+    await axios.post('https://restaurant-order-app8.onrender.com/api/orders', {
       tableNumber: tableNumber,
       note: note || '',
       items: cart.map(item => ({ foodName: item.food.name, quantity: item.quantity })),
@@ -61,7 +61,7 @@ function App() {
           {foods.map(food => (
               <li key={food._id} className="food-item">
               <img 
-                src={`http://localhost:5000/uploads/${food.image}`} 
+                src={`https://restaurant-order-app8.onrender.com/upload/${food.image}`} 
                 alt={food.name} 
                 className="food-image" 
               />
