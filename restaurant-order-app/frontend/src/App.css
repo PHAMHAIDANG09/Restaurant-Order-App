@@ -1,0 +1,195 @@
+/* App.css */
+
+/* Tổng bố cục trang */
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Chiều cao toàn màn hình */
+}
+
+/* Phần menu chiếm 75% bên trái */
+.menu-container {
+  flex: 3; /* 75% */
+  padding: 20px;
+  background-image: url('./biamonan.png'); /* Đường dẫn tới ảnh nền */
+  background-size: cover; /* Đảm bảo ảnh phủ kín khu vực */
+  background-position: center; /* Căn giữa ảnh */
+  background-repeat: no-repeat; /* Không lặp lại ảnh */
+  color: white; /* Màu chữ trong menu */
+  overflow-y: auto;
+}
+
+.menu-container h1 {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Làm nền tiêu đề mờ để nổi bật */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.food-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.food-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Viền mờ màu trắng */
+  background-color: rgba(0, 0, 0, 0.5); /* Nền mờ cho các item */
+  border-radius: 5px;
+}
+
+.food-item button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.food-item button:hover {
+  background-color: #45a049;
+}
+
+/* Phần giỏ hàng chiếm 25% bên phải */
+.cart-container {
+  flex: 1; /* 25% */
+  padding: 20px;
+  background-color: #f7f7f7; /* Màu nền sáng nhẹ */
+  border-left: 2px solid #ccc; /* Viền phân cách màu trung tính */
+  box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  color: #333; /* Màu chữ tối */
+}
+
+.cart-container h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #2196F3; /* Màu xanh nổi bật */
+  font-weight: bold;
+}
+
+.cart-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ddd; /* Viền nhẹ */
+  border-radius: 5px;
+  background-color: #fff; /* Nền trắng nổi bật */
+}
+
+.cart-item:hover {
+  background-color: #f0f0f0; /* Hiệu ứng hover */
+}
+
+.order-details {
+  margin-top: 20px;
+}
+
+.order-details label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #555; /* Màu chữ trung tính */
+}
+
+.order-details input,
+.order-details textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc; /* Viền trung tính */
+  border-radius: 5px;
+  background-color: #fff; /* Nền trắng */
+}
+
+.order-button {
+  width: 100%;
+  background-color: #ff5722; /* Màu cam nổi bật */
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.order-button:disabled {
+  background-color: #ccc; /* Màu xám khi không khả dụng */
+  cursor: not-allowed;
+}
+
+.order-button:hover:enabled {
+  background-color: #e64a19; /* Hiệu ứng hover */
+}
+
+.food-image {
+  width: 120px; /* Tăng kích thước ảnh */
+  height: 120px; 
+  object-fit: cover;
+  border-radius: 8px;
+}
+.food-item {
+  display: flex;
+  align-items: center; /* Căn giữa các phần tử theo chiều dọc */
+  justify-content: space-between; /* Giữ nút ở sát mép phải */
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Viền mờ màu trắng */
+  background-color: rgba(0, 0, 0, 0.5); /* Nền mờ cho các item */
+  border-radius: 5px;
+}
+
+.food-details {
+  display: flex;
+  flex-direction: column; /* Căn nội dung theo cột */
+  justify-content: center; /* Căn giữa theo chiều dọc */
+  margin-left: 15px; /* Tạo khoảng cách giữa ảnh và chữ */
+  flex: 1; /* Cho phép phần chữ chiếm tối đa không gian trống */
+}
+
+.food-details span {
+  font-size: 24px; /* Tăng kích thước chữ */
+  font-weight: bold; /* Chữ đậm */
+  color: white; /* Màu chữ trắng */
+}
+
+.food-details span.price {
+  font-size: 20px; /* Kích thước giá nhỏ hơn tên món */
+  font-weight: bold; /* Giá cũng đậm */
+  color: #ffd700; /* Màu vàng nổi bật cho giá */
+  margin-top: 5px; /* Khoảng cách giữa tên món và giá */
+}
+
+.food-image {
+  width: 120px; /* Tăng kích thước ảnh */
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px; /* Khoảng cách giữa ảnh và phần chữ */
+}
+
+.food-item button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px; /* Kích thước nút lớn hơn */
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 15px; /* Khoảng cách với phần chữ */
+}
+
+.food-item button:hover {
+  background-color: #45a049;
+}
+
+
