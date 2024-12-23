@@ -61,7 +61,7 @@ function App() {
           {foods.map(food => (
               <li key={food._id} className="food-item">
               <img 
-                src={`https://restaurant-order-app8.onrender.com/upload/${food.image}`} 
+                src={`https://restaurant-order-app8.onrender.com/uploads/${food.image}`} 
                 alt={food.name} 
                 className="food-image" 
               />
