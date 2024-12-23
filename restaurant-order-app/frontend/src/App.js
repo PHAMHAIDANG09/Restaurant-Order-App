@@ -49,16 +49,19 @@ function App() {
       alert('Vui lòng nhập số bàn!');
       return;
     }
+  
     await axios.post('https://restaurant-order-app8.onrender.com/api/orders', {
       tableNumber: tableNumber,
       note: note || '',
       items: cart.map(item => ({ foodName: item.food.name, quantity: item.quantity })),
     });
+  
     alert('Order placed!');
     setCart([]);
     setTableNumber('');
     setNote('');
   };
+  
 
   return (
     <div className="app-container">

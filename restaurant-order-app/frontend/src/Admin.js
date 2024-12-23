@@ -12,7 +12,7 @@ function Admin() {
       try {
         const { data } = await axios.get('https://restaurant-order-app8.onrender.com/api/orders');
         setOrders(data);
-
+  
         // Khởi tạo trạng thái checkbox mặc định là false
         const initialStatus = {};
         data.forEach(order => {
@@ -23,8 +23,15 @@ function Admin() {
         console.error('Error fetching orders:', error);
       }
     };
+  
+    // Lấy đơn hàng ban đầu khi trang load
     fetchOrders();
+  
+    // Set polling để kiểm tra mỗi 5 giây
+    const interval = setInterval(fetchOrders, 5000); // 5000ms = 5s
+    return () => clearInterval(interval); // Dọn dẹp interval khi component unmount
   }, []);
+  
 
   const handleCheckboxChange = (orderId, field) => {
     const updatedStatus = {
