@@ -1,6 +1,14 @@
 /* App.css */
 
 /* Tổng bố cục trang */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
 .app-container {
   display: flex;
   flex-direction: row;
@@ -33,6 +41,7 @@
 
 .food-item {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
   padding: 10px;
@@ -41,13 +50,43 @@
   border-radius: 5px;
 }
 
+.food-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.food-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 15px;
+  flex: 1;
+}
+
+.food-details span {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.food-details span.price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-top: 5px;
+}
+
 .food-item button {
   background-color: #4caf50;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
+  margin-left: 15px;
 }
 
 .food-item button:hover {
@@ -58,17 +97,17 @@
 .cart-container {
   flex: 1; /* 25% */
   padding: 20px;
-  background-color: #f7f7f7; /* Màu nền sáng nhẹ */
-  border-left: 2px solid #ccc; /* Viền phân cách màu trung tính */
+  background-color: #f7f7f7;
+  border-left: 2px solid #ccc;
   box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
-  color: #333; /* Màu chữ tối */
+  color: #333;
 }
 
 .cart-container h2 {
   text-align: center;
   margin-bottom: 15px;
-  color: #2196F3; /* Màu xanh nổi bật */
+  color: #2196F3;
   font-weight: bold;
 }
 
@@ -82,13 +121,13 @@
   justify-content: space-between;
   margin-bottom: 15px;
   padding: 10px;
-  border: 1px solid #ddd; /* Viền nhẹ */
+  border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #fff; /* Nền trắng nổi bật */
+  background-color: #fff;
 }
 
 .cart-item:hover {
-  background-color: #f0f0f0; /* Hiệu ứng hover */
+  background-color: #f0f0f0;
 }
 
 .order-details {
@@ -99,7 +138,7 @@
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
-  color: #555; /* Màu chữ trung tính */
+  color: #555;
 }
 
 .order-details input,
@@ -107,14 +146,14 @@
   width: 100%;
   padding: 8px;
   margin-top: 5px;
-  border: 1px solid #ccc; /* Viền trung tính */
+  border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #fff; /* Nền trắng */
+  background-color: #fff;
 }
 
 .order-button {
   width: 100%;
-  background-color: #ff5722; /* Màu cam nổi bật */
+  background-color: #ff5722;
   color: white;
   border: none;
   padding: 10px;
@@ -124,72 +163,67 @@
 }
 
 .order-button:disabled {
-  background-color: #ccc; /* Màu xám khi không khả dụng */
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
 .order-button:hover:enabled {
-  background-color: #e64a19; /* Hiệu ứng hover */
+  background-color: #e64a19;
 }
 
-.food-image {
-  width: 120px; /* Tăng kích thước ảnh */
-  height: 120px; 
-  object-fit: cover;
-  border-radius: 8px;
-}
-.food-item {
-  display: flex;
-  align-items: center; /* Căn giữa các phần tử theo chiều dọc */
-  justify-content: space-between; /* Giữ nút ở sát mép phải */
-  margin-bottom: 10px;
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.5); /* Viền mờ màu trắng */
-  background-color: rgba(0, 0, 0, 0.5); /* Nền mờ cho các item */
-  border-radius: 5px;
-}
+/* Media Queries cho màn hình nhỏ */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+    height: auto;
+  }
 
-.food-details {
-  display: flex;
-  flex-direction: column; /* Căn nội dung theo cột */
-  justify-content: center; /* Căn giữa theo chiều dọc */
-  margin-left: 15px; /* Tạo khoảng cách giữa ảnh và chữ */
-  flex: 1; /* Cho phép phần chữ chiếm tối đa không gian trống */
+  .menu-container, 
+  .cart-container {
+    flex: 1;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .menu-container {
+    order: 1;
+  }
+
+  .cart-container {
+    order: 2;
+    border-left: none;
+    border-top: 2px solid #ccc;
+  }
+
+  .food-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .food-image {
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .food-details {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .food-item button {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .order-details input,
+  .order-details textarea {
+    font-size: 14px;
+  }
+
+  .order-button {
+    font-size: 16px;
+    padding: 8px;
+  }
 }
-
-.food-details span {
-  font-size: 24px; /* Tăng kích thước chữ */
-  font-weight: bold; /* Chữ đậm */
-  color: white; /* Màu chữ trắng */
-}
-
-.food-details span.price {
-  font-size: 20px; /* Kích thước giá nhỏ hơn tên món */
-  font-weight: bold; /* Giá cũng đậm */
-  color: #ffd700; /* Màu vàng nổi bật cho giá */
-  margin-top: 5px; /* Khoảng cách giữa tên món và giá */
-}
-
-.food-image {
-  width: 120px; /* Tăng kích thước ảnh */
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-right: 15px; /* Khoảng cách giữa ảnh và phần chữ */
-}
-
-.food-item button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px; /* Kích thước nút lớn hơn */
-  cursor: pointer;
-  border-radius: 5px;
-  margin-left: 15px; /* Khoảng cách với phần chữ */
-}
-
-.food-item button:hover {
-  background-color: #45a049;
-}
-
-
