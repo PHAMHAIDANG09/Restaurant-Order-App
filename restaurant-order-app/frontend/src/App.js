@@ -25,8 +25,14 @@ function App() {
       setTableNumber(tableFromUrl); // Đặt số bàn từ URL
     }
   }, []);
+  useEffect(() => {
+    // Tạm thời chỉ để kích hoạt render lại
+  }, [cart]);/////
+  
 
-  const addToCart = (food) => {
+  const [forceUpdate, setForceUpdate] = useState(false);
+
+  const addToCart = (food) => {/////
     const item = cart.find(item => item.food.name === food.name);
     if (item) {
       item.quantity++;
@@ -34,7 +40,9 @@ function App() {
     } else {
       setCart([...cart, { food, quantity: 1 }]);
     }
+    setForceUpdate(!forceUpdate); // Buộc React render lại
   };
+
 
   const handleOrder = async () => {
     if (!tableNumber) {
@@ -82,15 +90,16 @@ function App() {
         <h2>Giỏ Hàng</h2>
         {cart.length > 0 ? (
           <ul className="cart-list">
-            {cart.map(item => (
-              <li key={item.food._id} className="cart-item">
-                <span>{item.food.name} x {item.quantity}</span>
-                <button onClick={() => setCart(cart.filter(i => i.food._id !== item.food._id))}>
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
+          {cart.map((item, index) => (
+            <li key={`${item.food._id}-${index}`} className="cart-item">
+              <span>{item.food.name} x {item.quantity}</span>
+              <button onClick={() => setCart(cart.filter(i => i.food._id !== item.food._id))}>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+        
         ) : (
           <p>Giỏ hàng hiện trống.</p>
         )}
