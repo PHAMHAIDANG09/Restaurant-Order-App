@@ -102,3 +102,63 @@ p {
   vertical-align: middle;
 }
 
+.food-management {
+  margin-top: 30px;
+}
+
+.food-management h2 {
+  color: #ffcc00;
+}
+
+.food-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.food-form input {
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.food-form button {
+  padding: 10px;
+  background-color: #ffcc00;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.food-form button:hover {
+  background-color: #e6b800;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 1.2rem;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background-color: #ffcc00;
+}
+
+.food-management, .orders-section {
+  display: block;
+}

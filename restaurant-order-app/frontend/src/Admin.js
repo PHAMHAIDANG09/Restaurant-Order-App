@@ -4,122 +4,184 @@ import './Admin.css';
 
 function Admin() {
   const [orders, setOrders] = useState([]);
-  const [orderStatus, setOrderStatus] = useState({}); // State lưu trạng thái checkbox cho từng order
-  const [hiddenOrders, setHiddenOrders] = useState({}); // State lưu trạng thái ẩn/hiện đơn hàng
+  const [foods, setFoods] = useState([]); // State lưu danh sách món ăn
+  const [newFood, setNewFood] = useState({ name: '', price: '', image: '' }); // State lưu thông tin món mới
+  const [editingFood, setEditingFood] = useState(null); // State lưu món ăn đang sửa
+  const [activeTab, setActiveTab] = useState('orders'); // State lưu tab đang hiển thị (orders/foods)
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchOrdersAndFoods = async () => {
       try {
-        const { data } = await axios.get('https://restaurant-order-app8.onrender.com/api/orders');
-        setOrders(data);
-  
-        // Khởi tạo trạng thái checkbox mặc định là false
-        const initialStatus = {};
-        data.forEach(order => {
-          initialStatus[order._id] = { sent: false, paid: false };
-        });
-        setOrderStatus(initialStatus);
+        const [ordersRes, foodsRes] = await Promise.all([
+          axios.get('https://restaurant-order-app8.onrender.com/api/orders'),
+          axios.get('https://restaurant-order-app8.onrender.com/api/foods'),
+        ]);
+        setOrders(ordersRes.data);
+        setFoods(foodsRes.data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error('Error fetching data:', error);
       }
     };
-  
-    // Lấy đơn hàng ban đầu khi trang load
-    fetchOrders();
-  
-    // Set polling để kiểm tra mỗi 5 giây
-    const interval = setInterval(fetchOrders, 5000); // 5000ms = 5s
-    return () => clearInterval(interval); // Dọn dẹp interval khi component unmount
+    fetchOrdersAndFoods();
   }, []);
-  
 
-  const handleCheckboxChange = (orderId, field) => {
-    const updatedStatus = {
-      ...orderStatus,
-      [orderId]: {
-        ...orderStatus[orderId],
-        [field]: !orderStatus[orderId][field], // Đảo ngược trạng thái checkbox
-      },
-    };
-    setOrderStatus(updatedStatus);
-
-    // Kiểm tra nếu cả hai checkbox đều được chọn thì ẩn đơn hàng
-    const isSentAndPaid = updatedStatus[orderId].sent && updatedStatus[orderId].paid;
-    setHiddenOrders({
-      ...hiddenOrders,
-      [orderId]: isSentAndPaid,
-    });
+  const handleAddFood = async () => {
+    try {
+      const { data } = await axios.post('https://restaurant-order-app8.onrender.com/api/foods', newFood);
+      setFoods([...foods, data]);
+      setNewFood({ name: '', price: '', image: '' });
+    } catch (error) {
+      console.error('Error adding food:', error);
+    }
   };
 
-  const handleShowOrder = (orderId) => {
-    setHiddenOrders({
-      ...hiddenOrders,
-      [orderId]: false, // Hiển thị lại đơn hàng
-    });
+  const handleEditFood = (food) => {
+    setEditingFood(food);
+  };
+
+  const handleUpdateFood = async () => {
+    try {
+      const { data } = await axios.put(
+        `https://restaurant-order-app8.onrender.com/api/foods/${editingFood._id}`,
+        editingFood
+      );
+      setFoods(foods.map((food) => (food._id === data._id ? data : food)));
+      setEditingFood(null);
+    } catch (error) {
+      console.error('Error updating food:', error);
+    }
+  };
+
+  const handleDeleteFood = async (id) => {
+    try {
+      await axios.delete(`https://restaurant-order-app8.onrender.com/api/foods/${id}`);
+      setFoods(foods.filter((food) => food._id !== id));
+    } catch (error) {
+      console.error('Error deleting food:', error);
+    }
   };
 
   return (
     <div className="admin-container">
-      <h1>Khách gọi món</h1>
-      {orders.length > 0 ? (
-        <table className="orders-table">
-          <thead>
-            <tr>
-              <th>Mã đơn</th>
-              <th>Số bàn</th>
-              <th>Các món</th>
-              <th>Ghi chú</th>
-              <th>Thời gian đặt món</th>
-              <th>Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map(order => (
-              !hiddenOrders[order._id] && (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.tableNumber}</td>
+      <h1>Quản lý Món Ăn và Đơn Hàng</h1>
+
+      {/* Tabs to switch between order and food management */}
+      <div className="tabs">
+        <button onClick={() => setActiveTab('orders')} className={activeTab === 'orders' ? 'active' : ''}>
+          Quản lý Đơn Hàng
+        </button>
+        <button onClick={() => setActiveTab('foods')} className={activeTab === 'foods' ? 'active' : ''}>
+          Quản lý Món Ăn
+        </button>
+      </div>
+
+      {/* Orders Section */}
+      {activeTab === 'orders' && (
+        <div className="orders-section">
+          <h2>Danh sách đơn hàng</h2>
+          {orders.length > 0 ? (
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>Mã đơn</th>
+                  <th>Số bàn</th>
+                  <th>Các món</th>
+                  <th>Ghi chú</th>
+                  <th>Thời gian đặt món</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map(order => (
+                  <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td>{order.tableNumber}</td>
+                    <td>
+                      {order.items.map((item, index) => (
+                        <div key={index}>
+                          {item.foodName} x {item.quantity}
+                        </div>
+                      ))}
+                    </td>
+                    <td>{order.note || 'Không có ghi chú'}</td>
+                    <td>{new Date(order.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No orders found.</p>
+          )}
+        </div>
+      )}
+
+      {/* Food Section */}
+      {activeTab === 'foods' && (
+        <div className="food-management">
+          <h2>Quản lý món ăn</h2>
+          <table className="orders-table">
+            <thead>
+              <tr>
+                <th>Tên món</th>
+                <th>Giá</th>
+                <th>Hình ảnh</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              {foods.map((food) => (
+                <tr key={food._id}>
+                  <td>{food.name}</td>
+                  <td>{food.price} VNĐ</td>
                   <td>
-                    {order.items.map((item, index) => (
-                      <div key={index}>
-                        {item.foodName} x {item.quantity}
-                      </div>
-                    ))}
+                    <img src={food.image} alt={food.name} style={{ width: '50px', height: '50px' }} />
                   </td>
-                  <td>{order.note || 'Không có ghi chú'}</td>
-                  <td>{new Date(order.createdAt).toLocaleString()}</td>
                   <td>
-                    <div className="checkbox-group">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={orderStatus[order._id]?.sent || false}
-                          onChange={() => handleCheckboxChange(order._id, 'sent')}
-                        />
-                        Đã gửi khách
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={orderStatus[order._id]?.paid || false}
-                          onChange={() => handleCheckboxChange(order._id, 'paid')}
-                        />
-                        Khách đã thanh toán
-                      </label>
-                    </div>
-                    {hiddenOrders[order._id] && (
-                      <button className="show-btn" onClick={() => handleShowOrder(order._id)}>
-                        <img src="/path/to/eye-icon.png" alt="Hiển thị đơn hàng" /> {/* Đổi đường dẫn hình con mắt */}
-                      </button>
-                    )}
+                    <button onClick={() => handleEditFood(food)}>Sửa</button>
+                    <button onClick={() => handleDeleteFood(food._id)}>Xóa</button>
                   </td>
                 </tr>
-              )
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>No orders found.</p>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Form thêm/sửa món ăn */}
+          <div className="food-form">
+            <h3>{editingFood ? 'Sửa món ăn' : 'Thêm món ăn'}</h3>
+            <input
+              type="text"
+              placeholder="Tên món"
+              value={editingFood ? editingFood.name : newFood.name}
+              onChange={(e) =>
+                editingFood
+                  ? setEditingFood({ ...editingFood, name: e.target.value })
+                  : setNewFood({ ...newFood, name: e.target.value })
+              }
+            />
+            <input
+              type="number"
+              placeholder="Giá"
+              value={editingFood ? editingFood.price : newFood.price}
+              onChange={(e) =>
+                editingFood
+                  ? setEditingFood({ ...editingFood, price: e.target.value })
+                  : setNewFood({ ...newFood, price: e.target.value })
+              }
+            />
+            <input
+              type="text"
+              placeholder="Link hình ảnh"
+              value={editingFood ? editingFood.image : newFood.image}
+              onChange={(e) =>
+                editingFood
+                  ? setEditingFood({ ...editingFood, image: e.target.value })
+                  : setNewFood({ ...newFood, image: e.target.value })
+              }
+            />
+            <button onClick={editingFood ? handleUpdateFood : handleAddFood}>
+              {editingFood ? 'Cập nhật' : 'Thêm mới'}
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
